@@ -9,6 +9,9 @@ namespace=""
 tmp_file_creation=""
 apply=""
 
+# Magic incantation from https://stackoverflow.com/a/246128/15768984
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 help() {
   echo "kubectl-inline [option] [resource type]"
   echo "  -r|--recover"
@@ -100,7 +103,7 @@ then
   cat "$recovery_file" > "$file" # Put its content into $file
 elif [ -n "$resource" ] # Else, if creating a new resource with a template
 then
-  cat "./templates/$resource.yaml" > "$file"
+  cat "$SCRIPT_DIR/templates/$resource.yaml" > "$file"
   if [ -n "$namespace" ]
   then
     sed -i "s/%namespace%/$namespace/" "$file"
