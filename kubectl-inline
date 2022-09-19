@@ -10,7 +10,10 @@ tmp_file_creation=""
 apply=""
 
 help() {
-  echo "kubectl-inline"
+  echo "kubectl-inline [option] [resource type]"
+  echo "  -r|--recover"
+  echo "  -n|--namespace"
+  echo "  -h|--help"
 }
 
 # Set up command-line options
