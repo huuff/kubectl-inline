@@ -66,6 +66,12 @@ case $1 in
    ;;
 esac
 
+if [ -z "${2+x}" ]
+then
+  >&2 echo "Only one resource type allowed"
+  exit 1
+fi
+
 # Create a temporary file to edit
 file=$(mktemp --suffix ".yaml")
 trap 'rm $file' EXIT
