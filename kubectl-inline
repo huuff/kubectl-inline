@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# Open $EDITOR to edit a YAML and then apply it with kubernetes
+set -euo pipefail
+
+recovery_file=/tmp/kubectl-inline/last.yaml
+resource=""
+recover=""
+namespace=""
+tmp_file_creation=""
+apply=""
+
+help() {
+  echo "kubectl-inline"
+}
+
+# Set up command-line options
+SHORT="n:,r,a,h"
+LONG="namespace:,recover,apply,help"
+OPTS=$(getopt --name "kubectl-inline" --options "$SHORT" --longoptions "$LONG" -- "$@")
+>&2 echo "OPTS: $OPTS"
+
+eval set -- "$OPTS"
+
+# Prepare a file to keep the last inline file made
+mkdir -p "$(dirname "$recovery_file")"
+touch "$recovery_file"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -n|--namespace)
+      namespace="$2"
+      shift 2
+      ;;
+    -r|--recover)
+      recover="TRUE"
+      shift 2
+      ;;
+    -a|--apply)
+      apply="TRUE"
+      shift
+      ;;
+    -h|--help)
+      exit 2 # TODO: This is not working for shorthand as in -arh
+      ;;
+    --)
+      shift;
+      break
+      ;;
+  esac
+done
+
+if [[ -n "$recover" && -n "$1" ]]
+then
+  >&2 echo "Can't use -r|--recover with a resource type"
+fi
+                                                        
+case $1 in                                              
+ cm|configmap)                                          
+   resource="configmap"                                 
+   shift                                                
+   ;;                                                   
+ secret)                                                
+   resource="secret"
+   shift
+   ;;
+esac
+
+# Create a temporary file to edit
+file=$(mktemp --suffix ".yaml")
+trap 'rm $file' EXIT
+
+if [ -n "$recover" ] # If recovering last file
+then 
+  cat "$recovery_file" > "$file" # Put its content into $file
+elif [ -n "$resource" ] # Else, if creating a new resource with a template
+then
+  cat "./templates/$resource.yaml" > "$file"
+  if [ -n "$namespace" ]
+  then
+    sed -i "s/%namespace%/$namespace/" "$file"
+  else
+    sed -i "/.*%namespace%.*/d" "$file"
+  fi
+fi
+
+# Open it in $EDITOR
+tmp_file_creation=$(stat -c "%Z" "$file")
+"$EDITOR" "$file"
+tmp_file_modification=$(stat -c "%Z" "$file")
+
+# Save contents in /tmp/kubectl-inline/last to be able to recover it with -r
+cat "$file" > "$recovery_file"
+
+if [[ "$tmp_file_creation" != "$tmp_file_modification" ]]
+then # File was modified
+  cat "$file"
+  if [ -n "$apply" ]
+  then
+    kubectl ${namespace:+-n $namespace} apply -f "$file"
+  fi
+else # File wasn't modified
+  >&2 echo "No changes applied"
+fi
+
