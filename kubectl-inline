@@ -20,6 +20,7 @@ help() {
 SHORT="n:,r,a,h"
 LONG="namespace:,recover,apply,help"
 OPTS=$(getopt --name "kubectl-inline" --options "$SHORT" --longoptions "$LONG" -- "$@")
+>&2 echo "OPTS: $OPTS"
 
 eval set -- "$OPTS"
 
@@ -59,18 +60,22 @@ then
 fi
                                                         
 case $1 in                                              
- cm|configmap)                                          
-   resource="configmap"                                 
-   shift                                                
-   ;;                                                   
- secret)                                                
-   resource="secret"
-   shift
-   ;;
+  cm|configmap)                                          
+    resource="configmap"                                 
+    ;;                                             
+  secret)                                                
+    resource="secret"
+    ;;
+  po|pod)
+    resource="pod"
+    ;;
+  deploy|deployment)
+    resource="deployment"
+    ;;
 esac
 
 # XXX: The weird variable substitution prevents errors about it being unset
-if [ -z "${2+x}" ]
+if [ -n "${2-""}" ]
 then
   >&2 echo "Only one resource type allowed"
   exit 1
