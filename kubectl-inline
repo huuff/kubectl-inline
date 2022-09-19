@@ -14,6 +14,8 @@ help() {
   echo "  -r|--recover"
   echo "  -n|--namespace"
   echo "  -h|--help"
+
+  exit 2
 }
 
 # Set up command-line options
@@ -22,7 +24,13 @@ LONG="namespace:,recover,apply,help"
 OPTS=$(getopt --name "kubectl-inline" --options "$SHORT" --longoptions "$LONG" -- "$@")
 >&2 echo "OPTS: $OPTS"
 
+if [[ "$#" == 0 ]]
+then
+  help
+fi
+
 eval set -- "$OPTS"
+
 
 # Prepare a file to keep the last inline file made
 mkdir -p "$(dirname "$recovery_file")"
@@ -45,7 +53,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     -h|--help)
       help
-      exit 2 
       ;;
     --)
       shift;
