@@ -69,6 +69,7 @@ case $1 in
    ;;
 esac
 
+# XXX: The weird variable substitution prevents errors about it being unset
 if [ -z "${2+x}" ]
 then
   >&2 echo "Only one resource type allowed"
