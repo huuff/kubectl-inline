@@ -72,6 +72,9 @@ case $1 in
   deploy|deployment)
     resource="deployment"
     ;;
+  svc|service)
+    resouce="service"
+    ;;
 esac
 
 # XXX: The weird variable substitution prevents errors about it being unset
