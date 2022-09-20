@@ -83,7 +83,15 @@ case $1 in
     resource="deployment"
     ;;
   svc|service)
-    resouce="service"
+    resource="service"
+    ;;
+  ns|namespace)
+    if [ -n "$namespace" ]
+    then
+      >&2 echo "Cannot provide the -n|--namespace flag for a namespace resource"
+      exit 1
+    fi
+    resource="namespace"
     ;;
 esac
 
