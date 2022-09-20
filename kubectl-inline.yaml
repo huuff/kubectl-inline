@@ -25,5 +25,5 @@ spec:
       # TODO: Add a license
     - from: "LICENSE"
       to: "."
-    bin: kubectl-inline
+    bin: "./kubectl-inline"
 
