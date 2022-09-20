@@ -1,0 +1,29 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: kubectl-inline
+spec:
+  version: "v0.1.0"
+  homepage: https://github.com/huuff/kubectl-inline
+  shortDescription: "Easily create a resource from the command-line."
+  description: |
+    Allows creating a resorce quickly from the command line in your `$EDITOR`. Optionally, you can choose a template to base your resource on.
+  platforms:
+  - selector:
+      matchExpressions:
+      - key: "os"
+        operator: "In"
+        values:
+        - linux
+    uri: https://github.com/huuff/kubectl-inline/archive/refs/tags/0.1.0.zip
+    sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    files:
+    - from: "kubectl-inline-*/kubectl-inline"
+      to: "./kubectl-inline"
+    - from: "kubectl-inline-*/templates"
+      to: "./templates"
+      # TODO: Add a license
+    - from: "LICENSE"
+      to: "."
+    bin: kubectl-inline
+
