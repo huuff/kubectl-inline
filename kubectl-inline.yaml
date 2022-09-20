@@ -22,8 +22,7 @@ spec:
       to: "./kubectl-inline"
     - from: "kubectl-inline-*/templates"
       to: "./templates"
-      # TODO: Add a license
-    - from: "LICENSE"
+    - from: "kubectl-inline-*/LICENSE"
       to: "."
     bin: "./kubectl-inline"
 
