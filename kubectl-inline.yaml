@@ -3,7 +3,7 @@ kind: Plugin
 metadata:
   name: kubectl-inline
 spec:
-  version: "v0.1.1"
+  version: "v0.1.2"
   homepage: https://github.com/huuff/kubectl-inline
   shortDescription: "Easily create a resource from the command-line."
   description: |
@@ -15,8 +15,8 @@ spec:
         operator: "In"
         values:
         - linux
-    uri: https://github.com/huuff/kubectl-inline/archive/refs/tags/0.1.1.zip
-    sha256: d800721c4866fe8f5ba65a419af06d9db1c66b09d7cc5ff39910391cfb9e1ac7
+    uri: https://github.com/huuff/kubectl-inline/archive/refs/tags/0.1.2.zip
+    sha256: 1057475555a283398d084585500b0eed5abdeab898d5b984f9678757c23c6e7b
     files:
     - from: "kubectl-inline-*/kubectl-inline"
       to: "./kubectl-inline"
