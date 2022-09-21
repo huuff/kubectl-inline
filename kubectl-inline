@@ -25,7 +25,6 @@ help() {
 SHORT="n:,r,a,h"
 LONG="namespace:,recover,apply,help"
 OPTS=$(getopt --name "kubectl-inline" --options "$SHORT" --longoptions "$LONG" -- "$@")
->&2 echo "OPTS: $OPTS"
 
 if [[ "$#" == 0 ]]
 then

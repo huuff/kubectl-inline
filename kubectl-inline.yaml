@@ -1,7 +1,7 @@
 apiVersion: krew.googlecontainertools.github.com/v1alpha2
 kind: Plugin
 metadata:
-  name: kubectl-inline
+  name: inline
 spec:
   version: "v0.1.2"
   homepage: https://github.com/huuff/kubectl-inline
@@ -17,5 +17,12 @@ spec:
         - linux
     uri: https://github.com/huuff/kubectl-inline/archive/refs/tags/0.1.2.zip
     sha256: 1057475555a283398d084585500b0eed5abdeab898d5b984f9678757c23c6e7b
+    files:
+      - from: "kubectl-inline*/kubectl-inline"
+        to: .
+      - from: "kubectl-inline*/LICENSE"
+        to: .
+      - from: "kubectl-inline*/templates"
+        to: .
     bin: "kubectl-inline"
 
