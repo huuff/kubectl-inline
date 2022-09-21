@@ -13,7 +13,7 @@ apply=""
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 help() {
-  echo "kubectl-inline [option] [resource type]"
+  echo "kubectl inline [flags] [resource type]"
   echo "  -r|--recover"
   echo "  -n|--namespace"
   echo "  -h|--help"
