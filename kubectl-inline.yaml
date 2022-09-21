@@ -17,12 +17,5 @@ spec:
         - linux
     uri: https://github.com/huuff/kubectl-inline/archive/refs/tags/0.1.2.zip
     sha256: 1057475555a283398d084585500b0eed5abdeab898d5b984f9678757c23c6e7b
-    files:
-    - from: "kubectl-inline-*/kubectl-inline"
-      to: "./kubectl-inline"
-    - from: "kubectl-inline-*/templates"
-      to: "./templates"
-    - from: "kubectl-inline-*/LICENSE"
-      to: "."
-    bin: "./kubectl-inline"
+    bin: "kubectl-inline"
 
