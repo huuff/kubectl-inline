@@ -2,6 +2,7 @@
 # Open $EDITOR to edit a YAML and then apply it with kubernetes
 set -euo pipefail
 
+# TODO: -v flag that prints this
 VERSION="0.1.4"
 
 recovery_file=/tmp/kubectl-inline/last.yaml
@@ -132,6 +133,7 @@ tmp_file_creation=$(stat -c "%Z" "$file")
 "$EDITOR" "$file"
 tmp_file_modification=$(stat -c "%Z" "$file")
 
+# TODO: Just cp?
 # Save contents in /tmp/kubectl-inline/last to be able to recover it with -r
 cat "$file" > "$recovery_file"
 
