@@ -2,15 +2,23 @@
 # Open $EDITOR to edit a YAML and then apply it with kubernetes
 set -euo pipefail
 
+VERSION="0.1.3"
+
 recovery_file=/tmp/kubectl-inline/last.yaml
 resource=""
 recover=""
 namespace=""
 tmp_file_creation=""
 apply=""
+template_directory=""
 
-# Magic incantation from https://stackoverflow.com/a/246128/15768984
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+if kubectl krew | grep -q inline > /dev/null 2>&1
+then
+  template_directory="${KREW_ROOT:-$HOME/.krew}/store/inline/v$VERSION/templates"
+else # It's not called as a plugin, therefore it must be close to the templates
+  # Magic incantation from https://stackoverflow.com/a/246128/15768984
+  template_directory="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/templates"
+fi
 
 help() {
   echo "kubectl inline [flags] [resource type]"
@@ -110,7 +118,7 @@ then
   cat "$recovery_file" > "$file" # Put its content into $file
 elif [ -n "$resource" ] # Else, if creating a new resource with a template
 then
-  cat "$SCRIPT_DIR/templates/$resource.yaml" > "$file"
+  cat "$template_directory/$resource.yaml" > "$file"
   if [ -n "$namespace" ]
   then
     sed -i "s/%namespace%/$namespace/" "$file"
