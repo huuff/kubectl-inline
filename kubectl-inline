@@ -2,7 +2,6 @@
 # Open $EDITOR to edit a YAML and then apply it with kubernetes
 set -euo pipefail
 
-# TODO: -v flag that prints this
 VERSION="0.1.4"
 
 recovery_file=/tmp/kubectl-inline/last.yaml
@@ -30,9 +29,15 @@ help() {
   exit 2
 }
 
+version() {
+  echo "kubectl-inline v$VERSION"
+
+  exit 2
+}
+
 # Set up command-line options
-SHORT="n:,r,a,h"
-LONG="namespace:,recover,apply,help"
+SHORT="n:,r,a,h,v;"
+LONG="namespace:,recover,apply,help,version"
 OPTS=$(getopt --name "kubectl-inline" --options "$SHORT" --longoptions "$LONG" -- "$@")
 
 if [[ "$#" == 0 ]]
@@ -64,6 +69,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     -h|--help)
       help
+      ;;
+    -v|--version)
+      version
       ;;
     --)
       shift;
