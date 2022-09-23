@@ -80,36 +80,39 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -n "$recover" && -n "$1" ]]
+if [[ -n "$recover" && -n "${1:-}" ]]
 then
   >&2 echo "Can't use -r|--recover with a resource type"
 fi
                                                         
-case $1 in                                              
-  cm|configmap)                                          
-    resource="configmap"                                 
-    ;;                                             
-  secret)                                                
-    resource="secret"
-    ;;
-  po|pod)
-    resource="pod"
-    ;;
-  deploy|deployment)
-    resource="deployment"
-    ;;
-  svc|service)
-    resource="service"
-    ;;
-  ns|namespace)
-    if [ -n "$namespace" ]
-    then
-      >&2 echo "Cannot provide the -n|--namespace flag for a namespace resource"
-      exit 1
-    fi
-    resource="namespace"
-    ;;
-esac
+if [[ -n "${1:-}" ]]
+then
+  case $1 in                                              
+    cm|configmap)                                          
+      resource="configmap"                                 
+      ;;                                             
+    secret)                                                
+      resource="secret"
+      ;;
+    po|pod)
+      resource="pod"
+      ;;
+    deploy|deployment)
+      resource="deployment"
+      ;;
+    svc|service)
+      resource="service"
+      ;;
+    ns|namespace)
+      if [ -n "$namespace" ]
+      then
+        >&2 echo "Cannot provide the -n|--namespace flag for a namespace resource"
+        exit 1
+      fi
+      resource="namespace"
+      ;;
+  esac
+fi
 
 # XXX: The weird variable substitution prevents errors about it being unset
 if [ -n "${2-""}" ]
@@ -141,9 +144,8 @@ tmp_file_creation=$(stat -c "%Z" "$file")
 "$EDITOR" "$file"
 tmp_file_modification=$(stat -c "%Z" "$file")
 
-# TODO: Just cp?
 # Save contents in /tmp/kubectl-inline/last to be able to recover it with -r
-cat "$file" > "$recovery_file"
+cp "$file" "$recovery_file"
 
 if [[ "$tmp_file_creation" != "$tmp_file_modification" ]]
 then # File was modified
