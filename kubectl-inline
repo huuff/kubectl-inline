@@ -103,6 +103,9 @@ then
     svc|service)
       resource="service"
       ;;
+    ing|ingress)
+      resource="ingress"
+      ;;
     ns|namespace)
       if [ -n "$namespace" ]
       then
