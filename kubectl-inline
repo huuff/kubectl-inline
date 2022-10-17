@@ -117,6 +117,12 @@ then
       fi
       resource="namespace"
       ;;
+    role)
+      resource="role"
+      ;;
+    clusterrule)
+      resource="clusterrole"
+      ;;
   esac
 fi
 
