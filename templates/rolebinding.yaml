@@ -7,7 +7,7 @@ subjects:
   - kind:
     name:
     apiGroup:
-    roleRef:
-      kind: Role
-      name:
-      apiGroup:
+roleRef:
+  kind: Role
+  name:
+  apiGroup:
